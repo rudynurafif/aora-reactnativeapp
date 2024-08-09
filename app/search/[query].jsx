@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchInput from '../../components/SearchInput';
@@ -10,7 +10,11 @@ import { useLocalSearchParams } from 'expo-router';
 
 const Search = () => {
   const { query } = useLocalSearchParams();
-  const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
+  const {
+    data: posts,
+    isLoading,
+    refetch,
+  } = useAppwrite(() => searchPosts(query));
 
   useEffect(() => {
     refetch();
@@ -18,33 +22,39 @@ const Search = () => {
 
   return (
     <SafeAreaView className='bg-primary h-full'>
-      <FlatList
-        data={posts}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard video={item} />}
-        ListHeaderComponent={() => (
-          <>
-            <View className='flex my-6 px-4'>
-              <Text className='font-pmedium text-gray-100 text-sm'>
-                Search Results
-              </Text>
-              <Text className='text-2xl font-psemibold text-white mt-1'>
-                "{query}"
-              </Text>
+      {isLoading ? (
+        <View className='flex-1 justify-center items-center'>
+          <ActivityIndicator size='large' color='#fff' />
+        </View>
+      ) : (
+        <FlatList
+          data={posts}
+          keyExtractor={(item) => item.$id}
+          renderItem={({ item }) => <VideoCard video={item} />}
+          ListHeaderComponent={() => (
+            <>
+              <View className='flex my-6 px-4'>
+                <Text className='font-pmedium text-gray-100 text-sm'>
+                  Search Results
+                </Text>
+                <Text className='text-2xl font-psemibold text-white mt-1'>
+                  "{query}"
+                </Text>
 
-              <View className='mt-6 mb-8'>
-                <SearchInput initialQuery={query} refetch={refetch} />
+                <View className='mt-6 mb-8'>
+                  <SearchInput initialQuery={query} refetch={refetch} />
+                </View>
               </View>
-            </View>
-          </>
-        )}
-        ListEmptyComponent={() => (
-          <EmptyState
-            title='No Videos Found'
-            subtitle={`No videos found for the search of "${query}"`}
-          />
-        )}
-      />
+            </>
+          )}
+          ListEmptyComponent={() => (
+            <EmptyState
+              title='No Videos Found'
+              subtitle={`No videos found for the search of "${query}"`}
+            />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };

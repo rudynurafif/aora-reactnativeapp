@@ -7,7 +7,7 @@ import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { Link, router } from 'expo-router';
 import { getCurrentUser, signIn } from '../../lib/appwrite';
-import { useGlobalContext } from '../../context/GlobarProvider';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const SignIn = () => {
   const { setUser, setIsLoggedIn } = useGlobalContext();
@@ -31,7 +31,7 @@ const SignIn = () => {
       setUser(result);
       setIsLoggedIn(true);
 
-      Alert.alert('Success', 'User signed in successfully');
+      Alert.alert('Success', 'Log in successfull');
       router.replace('/home');
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -84,7 +84,10 @@ const SignIn = () => {
             <Text className='text-lg text-gray-100 font-pregular'>
               Don't have account?
             </Text>
-            <Link href='/sign-up' className='text-lg font-psemibold text-secondary'>
+            <Link
+              href='/sign-up'
+              className='text-lg font-psemibold text-secondary'
+            >
               Sign Up
             </Link>
           </View>
