@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EmptyState from '../../components/EmptyState';
@@ -14,10 +15,24 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 import { icons } from '../../constants';
 import InfoBox from '../../components/InfoBox';
 import { router } from 'expo-router';
+import { useState } from 'react';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
-  const { data: posts, isLoading } = useAppwrite(() => getUserPosts(user.$id));
+  const {
+    data: posts,
+    refetch,
+    isLoading,
+  } = useAppwrite(() => getUserPosts(user.$id));
+
+  const [refresing, setRefresing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefresing(true);
+    // recall videos -> if any new videos appear
+    await refetch();
+    setRefresing(false);
+  };
 
   const logout = async () => {
     await signOut();
@@ -86,6 +101,9 @@ const Profile = () => {
               subtitle={`No videos found for the search`}
             />
           )}
+          refreshControl={
+            <RefreshControl refreshing={refresing} onRefresh={onRefresh} />
+          }
         />
       )}
     </SafeAreaView>
