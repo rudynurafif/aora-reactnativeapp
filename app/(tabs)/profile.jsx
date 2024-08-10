@@ -98,7 +98,7 @@ const Profile = () => {
           ListEmptyComponent={() => (
             <EmptyState
               title='No Videos Found'
-              subtitle={`No videos found for the search`}
+              subtitle={`${user.username} has no videos`}
             />
           )}
           refreshControl={

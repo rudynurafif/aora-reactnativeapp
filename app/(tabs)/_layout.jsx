@@ -2,11 +2,17 @@ import { View, Text, Image } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
 
 import { icons } from '../../constants';
+import { StatusBar } from 'expo-status-bar';
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
     <View className='items-center justify-center gap-2'>
-      <Image source={icon} resizeMode='contain' tintColor={color} className='w-6 h-6' />
+      <Image
+        source={icon}
+        resizeMode='contain'
+        tintColor={color}
+        className='w-6 h-6'
+      />
       <Text
         className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs`}
         style={{ color: color }}
@@ -39,11 +45,16 @@ const TabsLayout = () => {
             title: 'Home',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon icon={icons.home} color={color} name='Home' focused={focused} />
+              <TabIcon
+                icon={icons.home}
+                color={color}
+                name='Home'
+                focused={focused}
+              />
             ),
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name='bookmark'
           options={{
             title: 'Bookmark',
@@ -57,14 +68,19 @@ const TabsLayout = () => {
               />
             ),
           }}
-        />
+        /> */}
         <Tabs.Screen
           name='create'
           options={{
             title: 'Create',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon icon={icons.plus} color={color} name='Create' focused={focused} />
+              <TabIcon
+                icon={icons.plus}
+                color={color}
+                name='Create'
+                focused={focused}
+              />
             ),
           }}
         />
@@ -84,6 +100,7 @@ const TabsLayout = () => {
           }}
         />
       </Tabs>
+      <StatusBar backgroundColor='#161622' style='light' />
     </>
   );
 };
